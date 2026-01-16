@@ -133,6 +133,13 @@ echo "14. SEND. FILE_DATA_OK"
 sleep 1
 echo "FILE_DATA_OK" | nc $IP_CLIENT -q 0 $PORT
 
+
+echo "15. LISTEN. FILE_DATA_HASH"
+
+DATA=`nc -l -p $PORT`
+
+
+
 echo "Fin de comunicación"
 
 aplay $SERVER_DIR/$FILE_NAME

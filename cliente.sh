@@ -64,7 +64,7 @@ echo "12. LISTEN"
 
 RESPONSE=`nc -l -p $PORT`
 
-echo "15. TEST AND END"
+echo "16. TEST"
 
 if [ "$RESPONSE" != "FILE_DATA_OK" ]
 then
@@ -72,6 +72,30 @@ then
 
 	exit 3
 fi
+
+echo "17. SEND. FILE_DATA_HASH"
+
+
+FILE_DATA_HASH=`md5sum $AUDIO_FILE | cut -d " " -f 1`
+
+echo "FILE_DATA_HASH $FILE_DATA_HASH" | nc $IP_SERVER -q 0 $PORT
+
+echo "18. LISTEN"
+
+RESPONSE=`nc -l -p $PORT`
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 echo "Fin de comuniación"
 
