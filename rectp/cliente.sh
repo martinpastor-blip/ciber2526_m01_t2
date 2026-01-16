@@ -31,7 +31,6 @@ then
 fi
 
 echo "6. SEND. Nombre de archivo y hash"
-
 sleep 1
 echo "FILE_NAME $AUDIO_FILE" "$HASH_MD5_HEXADECIMAL"| nc $IP_SERVER -q 0 $PORT
 
