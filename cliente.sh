@@ -2,7 +2,7 @@
 
 AUDIO_FILE="audio.wav"
 
-VERSION_CURRENT="0.7"
+VERSION_CURRENT="0.8"
 
 PORT="9999"
 IP_SERVER="localhost"
@@ -38,8 +38,10 @@ fi
 
 echo "6. SEND. Nombre de archivo"
 
+AUDIO_FILE_HASH=`echo "$AUDIO_FILE" | md5sum | cut -d " " -f 1`
+
 sleep 1
-echo "FILE_NAME $AUDIO_FILE" | nc $IP_SERVER -q 0 $PORT
+echo "FILE_NAME $AUDIO_FILE $AUDIO_FILE_HASH" | nc $IP_SERVER -q 0 $PORT
 
 echo "7. LISTEN. FILE_NAME_OK"
 
