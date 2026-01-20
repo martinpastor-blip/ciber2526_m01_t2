@@ -1,7 +1,7 @@
 #/bin/bash
 
 VERSION_CURRENT="0.8"
-
+AUDIO_FILE="audio.wav"
 PORT="9999"
 IP_CLIENT="localhost"
 SERVER_DIR="server"
@@ -133,10 +133,23 @@ echo "14. SEND. FILE_DATA_OK"
 sleep 1
 echo "FILE_DATA_OK" | nc $IP_CLIENT -q 0 $PORT
 
+echo "15. LISTEN. AUDIO_FILE_DATA_HASH_FROM_CLIENT"
 
-echo "15. LISTEN. FILE_DATA_HASH"
+AUDIO_FILE_DATA_HASH_FROM_CLIENT=`nc -l -p $PORT`
 
-DATA=`nc -l -p $PORT`
+echo "19. TEST CLIENT AUDIO DATA HASH"
+
+AUDIO_FILE_DATA_HASH_TEST_LOCAL=`cat $AUDIO_FILE | md5sum | cut -d " " -f 1`
+
+echo "AUDIO_FILE_DATA_HASH_TEST_LOCAL $AUDIO_FILE_DATA_HASH_TEST_LOCAL"
+echo "AUDIO_FILE_DATA_HASH_FROM_CLIENT $AUDIO_FILE_DATA_HASH_FROM_CLIENT"
+
+if [ "$AUDIO_FILE_DATA_HASH_TEST_LOCAL" != "$AUDIO_FILE_DATA_HASH_FROM_CLIENT" ]
+then 
+echo "hash local no coincide con el enviado por cliente"
+
+exit 4
+fi
 
 
 

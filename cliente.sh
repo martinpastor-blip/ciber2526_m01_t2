@@ -64,25 +64,14 @@ echo "12. LISTEN"
 
 RESPONSE=`nc -l -p $PORT`
 
-echo "16. TEST"
-
-if [ "$RESPONSE" != "FILE_DATA_OK" ]
-then
-	echo "ERROR 3: Datos del archivo corruptos"
-
-	exit 3
-fi
-
-echo "17. SEND. FILE_DATA_HASH"
 
 
-FILE_DATA_HASH=`md5sum $AUDIO_FILE | cut -d " " -f 1`
+echo  "18 SEND AUDIO DATA HASH"
+AUDIOFILE_DATA_HASH=`cat $AUDIO_FILE | md5sum | cut -d " " -f 1`
 
-echo "FILE_DATA_HASH $FILE_DATA_HASH" | nc $IP_SERVER -q 0 $PORT
+echo "AUDIO_FILE_DATA_HASH $AUDIO_FILE_DATA_HASH"
 
-echo "18. LISTEN"
-
-RESPONSE=`nc -l -p $PORT`
+echo "$AUDIOFILE_DATA_HASH" | nc $IP_SERVER -q 0 $PORT
 
 
 
@@ -93,10 +82,5 @@ RESPONSE=`nc -l -p $PORT`
 
 
 
-
-
-
-
-echo "Fin de comuniación"
 
 exit 0
