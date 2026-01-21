@@ -20,7 +20,7 @@ echo "0. LISTEN. HEADER"
 
 DATA=`nc -l -p $PORT`
 
-echo "3.1. TEST. Datos"
+echo "2.1. TEST. Datos"
 
 HEADER=`echo $DATA | cut -d " " -f 1`
 
@@ -52,7 +52,7 @@ if [ "$IP_CLIENT" == "" ]
 then
 	echo "Error 4: IP de cliente mal formada ($IP_CLIENT)"
 
-	exit 4
+	exit 3
 fi
 
 
@@ -67,37 +67,37 @@ fi
 
 
 
-echo "3.2. RESPONSE. Enviando HEADER_OK"
+echo "2.2. RESPONSE. Enviando HEADER_OK"
 
 sleep 1
 echo "HEADER_OK" | nc $IP_CLIENT -q 0 $PORT
 
-echo "4. LISTEN. Nombre de archivo"
+echo "3. LISTEN. Nombre de archivo"
 
 DATA=`nc -l -p $PORT`
 
-echo "8. FILE NAME"
+echo "7. FILE NAME"
 
-echo "8.1 TEST"
+echo "7.1 TEST"
 
 FILE_NAME_PREFIX=`echo $DATA | cut -d " " -f 1`
 
 if [ "$FILE_NAME_PREFIX" != "FILE_NAME" ]
 then
-	echo "Error 3: Prefijo FILE_NAME incorrecto ($FILE_NAME_PREFIX)"
+	echo "Error 5: Prefijo FILE_NAME incorrecto ($FILE_NAME_PREFIX)"
 
 	sleep 1
 	echo "FILE_NAME_KO" | nc $IP_CLIENT -q 0 $PORT
 
-	exit 3
+	exit 5
 fi
 
 FILE_NAME=`echo $DATA | cut -d " " -f 2`
 
 if [ "$FILE_NAME" == "" ]
 then
-	echo "Error 3: Nombre de archivo vacío"
-	exit 3
+	echo "Error 6: Nombre de archivo vacío"
+	exit 6
 fi
 
 FILE_NAME_HASH=`echo $DATA | cut -d " " -f 3`
@@ -106,14 +106,14 @@ FILE_NAME_HASH_TEST=`echo "$FILE_NAME" | md5sum | cut -d " " -f 1`
 
 if [ "$FILE_NAME_HASH" != "$FILE_NAME_HASH_TEST" ]
 then
-	echo "Error 3h: Hash del nombre de archivo erróneo"
-	exit 3
+	echo "Error 7: Hash del nombre de archivo erróneo"
+	exit 7
 fi
 
 
 echo "File Name: $FILE_NAME"
 
-echo "8.2 RESPONSE FILE_NAME_OK"
+echo "7.2 RESPONSE FILE_NAME_OK"
 
 
 
@@ -123,21 +123,21 @@ echo "8.2 RESPONSE FILE_NAME_OK"
 sleep 1
 echo "FILE_NAME_OK" | nc $IP_CLIENT -q 0 $PORT
 
-echo "9. LISTEN FILE DATA"
-echo "13. STORE FILE DATA"
+echo "8. LISTEN FILE DATA"
+echo "12. STORE FILE DATA"
 
 nc -l -p $PORT > $SERVER_DIR/$FILE_NAME
 
-echo "14. SEND. FILE_DATA_OK"
+echo "13. SEND. FILE_DATA_OK"
 
 sleep 1
 echo "FILE_DATA_OK" | nc $IP_CLIENT -q 0 $PORT
 
-echo "15. LISTEN. AUDIO_FILE_DATA_HASH_FROM_CLIENT"
+echo "14. LISTEN. AUDIO_FILE_DATA_HASH_FROM_CLIENT"
 
 AUDIO_FILE_DATA_HASH_FROM_CLIENT=`nc -l -p $PORT`
 
-echo "19. TEST CLIENT AUDIO DATA HASH"
+echo "16. TEST CLIENT AUDIO DATA HASH"
 
 AUDIO_FILE_DATA_HASH_TEST_LOCAL=`cat $AUDIO_FILE | md5sum | cut -d " " -f 1`
 
@@ -146,9 +146,13 @@ echo "AUDIO_FILE_DATA_HASH_FROM_CLIENT $AUDIO_FILE_DATA_HASH_FROM_CLIENT"
 
 if [ "$AUDIO_FILE_DATA_HASH_TEST_LOCAL" != "$AUDIO_FILE_DATA_HASH_FROM_CLIENT" ]
 then 
-echo "hash local no coincide con el enviado por cliente"
+echo "Error 8. HASH_KO"
+exit 8
 
-exit 4
+else
+
+echo "HASH_OK"
+
 fi
 
 
