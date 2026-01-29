@@ -1,12 +1,14 @@
 #!/bin/bash
 
-SERVER_ADDRESS=localhost
-ERROR_RECTP=$?
+
+echo "dame la IP del server"
+read SERVER_ADDRESS
+
 
 ./cliente.sh $SERVER_ADDRESS
 
 
-if [ $ERROR_RECTP -gt 0 ] 
+if [ $? -gt 0 ] 
 then
 
 echo "error $? en" `date` >> rectp-sender.log
