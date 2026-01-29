@@ -1,11 +1,28 @@
 #!/bin/bash
 
+
+
+if [ $# -lt 1 ]
+then
+
+echo "ERROR 255: error de ejecucion, necesitas añadir parametros"
+echo "Sintaxis:"
+echo -e "\t$0 IP_SERVER"
+echo "Ejemplos de uso"
+echo -e "\t$0 localhost"
+echo -e "\t$0 X.X.X.X."
+
+
+
+exit 255
+fi
+
 AUDIO_FILE="audio.wav"
 
 VERSION_CURRENT="0.8"
 
 PORT="9999"
-IP_SERVER="localhost"
+IP_SERVER="$1"
 
 clear
 
@@ -21,6 +38,13 @@ IP_LOCAL_HASH=`echo "$IP_LOCAL" | md5sum | cut -d " " -f 1`
 sleep 1
 echo "RECTP $VERSION_CURRENT $IP_LOCAL $IP_LOCAL_HASH" | nc $IP_SERVER -q 0 $PORT
 
+if [ $? != 0 ]
+then
+echo "ERROR 127: error de conexion"
+exit 127
+fi
+
+echo "2.LISTEN TEST HEADER RESPONSE"
 RESPONSE=`nc -l -p $PORT`
 
 echo "4. TEST. Header Response"
